@@ -11,9 +11,11 @@ namespace ListAndLoopsExample
 
     class Coffee
     {
+        public enum Roast {light=1,lightmedium,medium,darkmedium,dark}
+
         public string brand;        
-        public decimal price;        
-        public int roast;
+        public double price;        
+        public Roast roast;
         public string importer;
         public Coffee()
         {
@@ -25,7 +27,7 @@ namespace ListAndLoopsExample
             this.brand = brand;
         }
 
-        public Coffee(string brand, decimal price, int roast, string importer)
+        public Coffee(string brand, double price, Roast roast, string importer)
         {
             this.brand = brand;
             this.price = price;
