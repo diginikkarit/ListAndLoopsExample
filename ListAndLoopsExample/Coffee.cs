@@ -14,7 +14,7 @@ namespace ListAndLoopsExample
         public enum Roast {light=1,lightmedium,medium,darkmedium,dark}
 
         public string brand;        
-        public double price;        
+        public decimal price;        
         public Roast roast;
         public string importer;
         public Coffee()
@@ -27,7 +27,7 @@ namespace ListAndLoopsExample
             this.brand = brand;
         }
 
-        public Coffee(string brand, double price, Roast roast, string importer)
+        public Coffee(string brand, decimal price, Roast roast, string importer = "default")
         {
             this.brand = brand;
             this.price = price;
