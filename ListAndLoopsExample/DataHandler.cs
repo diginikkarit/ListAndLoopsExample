@@ -23,17 +23,14 @@ namespace ListAndLoopsExample
             this.companies.Add(testCompany);      
         }
 
-        public Coffee CreateCoffee()
+        public void FillCoffeesWithTestData()
         {
-            Console.WriteLine("Anna kahvin merkki.");
-            var merkki = Console.ReadLine();
-            //syötetään hinta, paahto 1-5,
-            //ei companyä
-            Coffee toReturn = new Coffee(merkki);
-            var paahto  = Console.ReadLine();
-            int luku = Int16.Parse(paahto);
-            toReturn.roast = (Coffee.Roast)luku;
-            return toReturn;
+            Person contactPerson1 = new Person("Teppo", "Testipersoona", "050-888 4444", "teppo@testaus.fi");
+            Company testCompany = new Company("testiyritys-1", contactPerson1, "Finland");
+            Coffee coffee = new Coffee("Presidentti", 3.20, Coffee.Roast.medium, testCompany);
+            this.coffees.Add(coffee);
+            coffee = new Coffee("Brazil", 4.80, Coffee.Roast.darkmedium, testCompany);
+            this.coffees.Add(coffee);
         }
 
         public Person CreatePerson()
@@ -125,11 +122,60 @@ namespace ListAndLoopsExample
             Console.WriteLine("Syötä valittavan yrityksen numero:");
             //parse to int
             var selected = int.Parse(Console.ReadLine());
-            //Get Person object from the list and return it. 
-            //since the list starts with 1 but list index with 0, we need to -1 from selected.
             return this.companies[selected - 1];
         }
 
         #endregion
+
+        #region Coffee Stuff
+        public Coffee CreateCoffee()
+        {
+            Console.WriteLine("Anna kahvin merkki:");
+            string brand = Console.ReadLine();
+            Console.WriteLine("Anna kahvin hinta.");
+            double price = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("Anna paahteisuus aste(1-5):");
+            int number = int.Parse(Console.ReadLine());
+            //cast number to Roast Enum.
+            Coffee.Roast roast = (Coffee.Roast)number;
+
+            Console.WriteLine("Valitse maahantuonnin tekevä yritys.");
+            Company importer = SelectCompanyFromList();
+
+            Coffee newCoffeeObject = new Coffee(brand, price, roast, importer);
+            return newCoffeeObject;
+        }
+
+        public void AddNewCoffeeToList()
+        {
+            Coffee toAdd = CreateCoffee();
+            this.coffees.Add(toAdd);
+            Console.WriteLine("Kahvi lisättiin listaan.");
+        }
+
+        public void PrintCoffeeList()
+        {
+            int i = 1;
+            foreach (Coffee coffee in this.coffees)
+            {
+
+                Console.WriteLine($"{i}.\tMerkki:{coffee.brand}");
+                Console.WriteLine($"\tPaahteisuus:{coffee.roast}");
+                Console.WriteLine($"\tMaahantuoja:{coffee.importer.name}");
+                i++;
+            }
+        }
+
+        public Coffee SelectCoffeeFromList()
+        {
+            PrintCoffeeList();
+            Console.WriteLine("Syötä valittavan yrityksen numero:");
+            //parse to int
+            var selected = int.Parse(Console.ReadLine());
+            return this.coffees[selected - 1];
+        }
+
+        #endregion
+
     }
 }
