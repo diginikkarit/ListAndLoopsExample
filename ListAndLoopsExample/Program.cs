@@ -8,14 +8,14 @@ namespace ListAndLoopsExample
         
         static void Main(string[] args)
         {
-            
+            //Init datahandler with test data
             DataHandler dh = new DataHandler();
             dh.FillPersonsWithTestData();
             dh.FillCompaniesWithTestData();
             dh.FillCoffeesWithTestData();
 
-            MainMenu mm = new MainMenu(dh);
-            mm.InitializeMainMenu();
+            MainMenu mainMenu = new MainMenu(dh);
+            mainMenu.InitializeMainMenu();
 
             //Testing Person stuff
             //dh.AddPersonToList();

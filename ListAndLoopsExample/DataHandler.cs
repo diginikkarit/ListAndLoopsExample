@@ -51,15 +51,23 @@ namespace ListAndLoopsExample
         }
 
         #region Person stuff
-        public void AddNewPersonToList()
+        public Person AddNewPersonToList()
         {
             Person person = CreatePerson();
             this.persons.Add(person);
             Console.WriteLine("Henkilö Lisätty listaan");
+            return person;
         }
 
         public void PrintPersonList()
         {
+            //if the list is empty -> return
+            if(this.persons.Count == 0)
+            {
+                Console.WriteLine("Henkilölista on tyhjä.");
+                return;
+            }
+
             for (int i = 0; i < this.persons.Count; i++)
             {
                 Console.WriteLine($"{i+1}. {this.persons[i].firstName} {this.persons[i].lastName}");
@@ -89,23 +97,63 @@ namespace ListAndLoopsExample
             string country = Console.ReadLine();
 
             //later we add possibility to choose from list or add a new person.
-            Console.WriteLine("Valitse yhteyshenkilö listasta");
-            Person contactPerson = SelectPersonFromList();
+            bool personIsSelected = false;
+            
+            Person contactPerson = null;
+            
+            while (!personIsSelected)
+            {
+                Console.Clear();
 
+                Console.WriteLine("1. Valiste yhteyshenkilö listasta.");
+                Console.WriteLine("2. Lisää uusi yhteyshenkilö.");
+                Console.WriteLine("3. Ei yhteyshenkilöä.");
+                var selection = int.Parse(Console.ReadLine());
+                
+                switch (selection)
+                {
+                    case 1:
+                        contactPerson = SelectPersonFromList();
+                        personIsSelected = true;
+                        break;
+                    case 2:
+                        //Note. At this point AddNewPersonToList is edited 
+                        //so, that it also returns the Person added to the list.
+                        contactPerson = AddNewPersonToList();
+                        personIsSelected = true;
+                        break;
+                    case 3:
+                        //contactPerson is already null, so just end this while loop.
+                        personIsSelected = true;
+                        break;
+                    default:
+                        personIsSelected = false;
+                        break;
+                }
+            }
+            
             Company company = new Company(name, contactPerson, country);
 
             return company;
         }
 
-        public void AddNewCompanyToList()
+        public Company AddNewCompanyToList()
         {
             Company company = CreateCompany();
             this.companies.Add(company);
             Console.WriteLine("Yritys lisättiin listaan.");
+            return company;
         }
 
         public void PrintCompanyList()
         {
+            //if the list is empty -> return
+            if (this.companies.Count == 0)
+            {
+                Console.WriteLine("Yrityslista on tyhjä.");
+                return;
+            }
+
             int i = 1;
             foreach (Company company in this.companies)
             {
@@ -121,7 +169,7 @@ namespace ListAndLoopsExample
             PrintCompanyList();
             Console.WriteLine("Syötä valittavan yrityksen numero:");
             //parse to int
-            var selected = int.Parse(Console.ReadLine());
+            int selected = int.Parse(Console.ReadLine());
             return this.companies[selected - 1];
         }
 
@@ -139,8 +187,36 @@ namespace ListAndLoopsExample
             //cast number to Roast Enum.
             Coffee.Roast roast = (Coffee.Roast)number;
 
-            Console.WriteLine("Valitse maahantuonnin tekevä yritys.");
-            Company importer = SelectCompanyFromList();
+            Company importer = null;
+            bool impoterSelected = false;
+            while (!impoterSelected)
+            {
+                Console.Clear();
+
+                Console.WriteLine("Mikä on maahantuova yritys?");
+                Console.WriteLine("1. Valitse yritys listasta.");
+                Console.WriteLine("2. Uusi yritys.");
+                int selected = int.Parse(Console.ReadLine());
+                switch (selected)
+                {
+                    case 1:
+                        Console.Clear();
+                        importer = SelectCompanyFromList();
+                        impoterSelected = true;
+                        break;
+                    case 2:
+                        Console.Clear();
+                        importer = AddNewCompanyToList();
+                        impoterSelected = true;
+                        break;
+                    case 3:
+                        importer = null;
+                        impoterSelected = true;
+                        break;
+                    default:
+                        break;
+                }
+            }
 
             Coffee newCoffeeObject = new Coffee(brand, price, roast, importer);
             return newCoffeeObject;
@@ -155,6 +231,13 @@ namespace ListAndLoopsExample
 
         public void PrintCoffeeList()
         {
+            //if the list is empty -> return
+            if (this.coffees.Count == 0)
+            {
+                Console.WriteLine("Kahvi on tyhjä.");
+                return;
+            }
+
             int i = 1;
             foreach (Coffee coffee in this.coffees)
             {
